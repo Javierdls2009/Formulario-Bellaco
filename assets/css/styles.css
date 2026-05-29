@@ -1,0 +1,342 @@
+/* ==========================================================================
+   CHROME HEARTS ELEVADO: EDICIÓN PREMIUM "WOW" CON INTERACCIONES FLUIDAS
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+ 
+:root {
+  /* Paleta Terrosa de Lujo Extraída de tu Imagen */
+  --bg-page:        #DADED8; /* Aloe */
+  --bg-card:        #FDFDFB; /* Marfil puro mate */
+  --bg-input:       #F7F6F2; 
+  --bg-input-focus: #FFFFFF;
+  --bg-btn-primary: #2C3424; /* Moss */
+  
+  --text-primary:   #111111; 
+  --text-secondary: #4C583E; /* Cypress para textos secundarios */
+  --text-tertiary:  #768064; /* Olive para detalles refinados */
+  --text-on-dark:   #FFFFFF;
+ 
+  --border-subtle:  rgba(44, 52, 36, 0.06);
+  --border-default: rgba(44, 52, 36, 0.15);
+  --border-strong:  #2C3424; 
+ 
+  --radius-md:  6px;
+  --radius-xl:  0px;
+ 
+  --shadow-card: 0 20px 40px rgba(44, 52, 36, 0.04), 0 1px 3px rgba(0,0,0,0.02);
+  --shadow-focus: 0 0 0 4px rgba(118, 128, 100, 0.15); /* Halo Olive suave */
+ 
+  --font-serif: 'Times New Roman', Times, Georgia, serif;
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  
+  --anim-reveal: cubic-bezier(0.16, 1, 0.3, 1) 0.8s;
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes wowRevealLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes wowRevealRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes titleGlow {
+  from { opacity: 0; letter-spacing: 0.1em; filter: blur(4px); }
+  to { opacity: 1; letter-spacing: 0.22em; filter: blur(0); }
+}
+ 
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-page);
+  
+  background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 0), 
+                    radial-gradient(rgba(0,0,0,0.02) 1px, transparent 0);
+  background-size: 8px 8px;
+  background-position: 0 0, 4px 4px;
+  
+  color: var(--text-primary);
+  min-height: 100vh;
+  padding: 5rem 2rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3.5rem;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    grid-template-columns: 390px 1fr;
+    align-items: start;
+  }
+  h1 { grid-column: 1 / -1; }
+}
+ 
+h1 {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  border-bottom: 1.5px solid var(--border-strong);
+  padding-bottom: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  
+  animation: titleGlow 1s var(--anim-reveal) both;
+}
+
+h1::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+  box-shadow: 0 0 0 4px rgba(118, 128, 100, 0.2);
+}
+ 
+.form-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  
+  animation: wowRevealLeft 1s var(--anim-reveal) both;
+  animation-delay: 0.2s; /* Carga primero */
+}
+
+.table-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  
+  animation: wowRevealRight 1s var(--anim-reveal) both;
+  animation-delay: 0.35s;
+}
+ 
+h2 {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-primary);
+  padding: 1.35rem 2rem;
+  border-bottom: 1px solid var(--border-strong);
+  background: rgba(44, 52, 36, 0.02);
+}
+ 
+#userForm {
+  padding: 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+ 
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+ 
+label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  transition: var(--transition);
+}
+
+.form-group:focus-within label {
+  color: var(--text-primary);
+  transform: translateX(2px);
+}
+ 
+input[type="text"],
+input[type="email"],
+input[type="tel"] {
+  height: 44px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  padding: 0 16px;
+  outline: none;
+  transition: var(--transition);
+}
+ 
+input:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-input-focus);
+}
+ 
+input:focus {
+  border-color: var(--border-strong);
+  background: var(--bg-input-focus);
+  box-shadow: var(--shadow-focus);
+}
+ 
+input::placeholder {
+  color: #b0b5a9;
+  font-style: italic;
+  font-family: var(--font-serif);
+}
+ 
+.form-buttons {
+  display: flex;
+  gap: 14px;
+  padding-top: 0.5rem;
+}
+ 
+.btn {
+  height: 44px;
+  padding: 0 28px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  border: 1px solid var(--border-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition);
+}
+ 
+.btn:active { 
+  transform: scale(0.96); 
+}
+ 
+.btn-primary {
+  background: var(--bg-btn-primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover { 
+  background: transparent;
+  color: var(--bg-btn-primary);
+  box-shadow: 0 8px 20px rgba(44, 52, 36, 0.08);
+}
+ 
+.btn-secundary {
+  background: transparent;
+  color: var(--bg-btn-primary);
+}
+
+.btn-secundary:hover {
+  background: rgba(44, 52, 36, 0.05);
+}
+ 
+.table {
+  width: 100%;
+  overflow-x: auto;
+}
+ 
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+ 
+thead tr {
+  background: var(--bg-btn-primary);
+}
+ 
+thead th {
+  text-align: left;
+  padding: 18px 24px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #ffffff;
+  white-space: nowrap;
+}
+ 
+tbody tr {
+  border-bottom: 1px solid var(--border-subtle);
+  transition: var(--transition);
+}
+ 
+tbody tr:last-child { border-bottom: none; }
+ 
+tbody tr:hover { 
+  background: rgba(118, 128, 100, 0.04);
+  transform: scale(1.002);
+}
+ 
+tbody td {
+  padding: 18px 24px;
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+tbody td:nth-child(2) {
+  font-weight: 600;
+  font-family: var(--font-serif);
+  font-size: 14.5px;
+}
+ 
+tbody td button {
+  background: var(--bg-btn-primary);
+  border: 1px solid var(--bg-btn-primary);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+tbody tr td button:hover {
+  background: transparent;
+  color: var(--bg-btn-primary);
+}
+
+@media (max-width: 1023px) {
+  body { padding: 3rem 1rem; }
+  #userForm { padding: 1.75rem 1.5rem; }
+  h2 { padding: 1.125rem 1.5rem; }
+  h1 { font-size: 22px; letter-spacing: 0.18em; }
+  .form-container, .table-container { animation: wowRevealLeft 1s var(--anim-reveal) both; }
+}

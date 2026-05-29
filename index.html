@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <main class="container">
+        <h1>Formulario del Usuario</h1>
+        
+        <section class="form-container">
+            <h2>Formulario de Registro</h2>
+            <form action="" id="userForm">
+                <input type="hidden" id="userId">
+
+                <div class="form-group">
+                    <label for="name">Nombre:</label>
+                    <input type="text" id="name" required placeholder="Ingrese su Nombre">
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo Electronico: </label>
+                    <input type="email" id="email" required placeholder="Ingrese su correo">
+                </div>
+                <div class="form-group">
+                    <label for="number">Telefono: </label>
+                    <input type="tel" id="telefono" placeholder="Ingrese su telefono">
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-secundary" id="cancelBtn">Cancelar</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="table-container">
+            <h2>Lista de usuarios</h2>
+            <div class="table" id="userTable">
+                <table>
+                    <thead>
+                        <tr>
+                       <th>ID</th>
+                       <th>Nombre</th>
+                       <th>Correo Electronico</th>
+                       <th>Telefono</th>
+                       <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody class="t-body" id="userTableBody">
+
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
