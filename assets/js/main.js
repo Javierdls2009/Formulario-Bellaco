@@ -1,4 +1,4 @@
-let editId = null;
+let localUsers = [];
 
 const userForm = document.getElementById('userForm');
 const userId = document.getElementById('userId');
@@ -8,17 +8,14 @@ const telefono = document.getElementById('telefono');
 const userTableBody = document.getElementById('userTableBody');
 const cancelBtn = document.getElementById('cancelBtn');
 
-// 1. FUNCIÓN PARA TRAER LOS USUARIOS DESDE LA NUBE
 async function mostrarUsuarios() {
     if (!userTableBody) return;
 
     try {
-        // Llamamos a la función de Netlify
         const respuesta = await fetch('/.netlify/functions/obtener-usuarios');
-        const users = await respuesta.json();
+        localUsers = await respuesta.json();
 
-        // Si no hay registros en la base de datos
-        if (users.length === 0) {
+        if (localUsers.length === 0) {
             userTableBody.innerHTML = `
                 <tr>
                     <td colspan="5" style="text-align: center; padding: 2rem; color: #5A5A55;">
@@ -29,9 +26,8 @@ async function mostrarUsuarios() {
             return;
         }
 
-        // Si hay registros, los dibujamos en la tabla
         userTableBody.innerHTML = '';
-        users.forEach(user => {
+        localUsers.forEach(user => {
             userTableBody.innerHTML += `
                 <tr>
                     <td>${user.id}</td>
@@ -39,8 +35,10 @@ async function mostrarUsuarios() {
                     <td>${user.email}</td>
                     <td>${user.telefono || 'N/A'}</td>
                     <td>
-                        <button class="btn btn-primary" onclick="prepararEditar(${user.id})">Editar</button>
-                        <button class="btn btn-secundary" style="background-color: #ff4d4d; color:white;">Borrar</button>
+                        <div class="actions-cell">
+                            <button class="btn-table btn-edit" onclick="prepararEditar(${user.id})">Editar</button>
+                            <button class="btn-table btn-delete" onclick="borrarUsuario(${user.id})">Borrar</button>
+                        </div>
                     </td>
                 </tr>
             `;
@@ -52,10 +50,30 @@ async function mostrarUsuarios() {
     }
 }
 
-// 2. EVENTO PARA GUARDAR DATOS DEL FORMULARIO EN LA NUBE
-userForm.addEventListener('submit', async (e) => {
-    e.preventDefault(); // Evitamos que la página se recargue
+function prepararEditar(id) {
+    const usuarioAEditar = localUsers.find(u => u.id === id);
+    if (!usuarioAEditar) return;
 
+    userId.value = usuarioAEditar.id;
+    nombre.value = usuarioAEditar.nombre;
+    email.value = usuarioAEditar.email;
+    telefono.value = usuarioAEditar.telefono || '';
+
+    const submitBtn = userForm.querySelector('button[type="submit"]');
+    submitBtn.textContent = "Actualizar";
+}
+
+cancelBtn.addEventListener('click', () => {
+    userForm.reset();
+    userId.value = '';
+    const submitBtn = userForm.querySelector('button[type="submit"]');
+    submitBtn.textContent = "Guardar";
+});
+
+userForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const id = userId.value;
     const datosUsuario = {
         nombre: nombre.value,
         email: email.value,
@@ -63,18 +81,31 @@ userForm.addEventListener('submit', async (e) => {
     };
 
     try {
-        // Enviamos los datos al backend usando POST
-        const respuesta = await fetch('/.netlify/functions/guardar-usuario', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(datosUsuario)
-        });
+        let respuesta;
+        
+        if (id) {
+            datosUsuario.id = id;
+            respuesta = await fetch('/.netlify/functions/editar-usuario', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datosUsuario)
+            });
+        } else {
+            respuesta = await fetch('/.netlify/functions/guardar-usuario', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datosUsuario)
+            });
+        }
 
         if (respuesta.ok) {
-            userForm.reset(); // Limpiamos los inputs del formulario
-            mostrarUsuarios(); // Recargamos la tabla automáticamente para ver el nuevo registro
+            userForm.reset();
+            userId.value = '';
+            const submitBtn = userForm.querySelector('button[type="submit"]');
+            submitBtn.textContent = "Guardar";
+            mostrarUsuarios();
         } else {
-            alert("Hubo un error al guardar el usuario.");
+            alert("Hubo un error al procesar el usuario.");
         }
 
     } catch (error) {
@@ -82,5 +113,24 @@ userForm.addEventListener('submit', async (e) => {
     }
 });
 
-// Cargar la lista automáticamente al abrir la página
+async function borrarUsuario(id) {
+    if (!confirm("¿De verdad quieres eliminar este usuario de la base de datos?")) return;
+
+    try {
+        const respuesta = await fetch('/.netlify/functions/borrar-usuario', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: id })
+        });
+
+        if (respuesta.ok) {
+            mostrarUsuarios(); // Refrescamos la tabla tras eliminar
+        } else {
+            alert("No se pudo eliminar el usuario.");
+        }
+    } catch (error) {
+        console.error("Error eliminando usuario:", error);
+    }
+}
+
 mostrarUsuarios();
